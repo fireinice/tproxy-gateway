@@ -1,5 +1,6 @@
 #!/bin/sh
 DEST_IPSET=$@
+DEST_DIR=`dirname $DEST_IPSET`
 gen_ips_multi() {
   parts=$(echo $1 | tr ";" "\n")
 
@@ -15,13 +16,13 @@ gen_ips() {
     touch $outf
     if [ -f "$1" ]; then
 	cp $1 $outf
+	sed "s/^/add ${2} /" $outf >> $DEST_IPSET
+	rm $outf
     elif echo "$1" | grep -q "http"; then
-	wget -q $1 -O $outf
+	/scripts/async_ipset.sh $DEST_DIR $1 $2 &
     else
 	return
     fi
-    sed "s/^/add ${2} /" $outf >> $DEST_IPSET
-    rm $outf
 }
 
 echo -n "Generating ipset..."
@@ -35,4 +36,5 @@ echo "done"
 
 echo -n "Restore ipset..."
 ipset restore < $DEST_IPSET
+rm $DEST_IPSET
 echo "done"
