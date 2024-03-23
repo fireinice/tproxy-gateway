@@ -7,7 +7,7 @@ if [ -n "$DNS_PORT" ]; then
 iptables -t nat -N clash_dns
 iptables -t nat -F clash_dns
 iptables -t nat -A clash_dns -m set --match-set bypass_private dst -j RETURN
-iptables -t nat -A clash_dns -m set --match-set bypass_dest dst -j RETURN
+# iptables -t nat -A clash_dns -m set --match-set bypass_dest dst -j RETURN
 iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
 iptables -t nat -I PREROUTING -p udp --dport 53 -j clash_dns
 fi
