@@ -3,6 +3,11 @@
 ip rule add fwmark 1 table 100
 ip route add local 0.0.0.0/0 dev lo table 100
 
+# iptables -t nat -N clash_dns
+# iptables -t nat -A OUTPUT -p udp --dport 53 -j clash_dns
+# iptables -t nat -F clash_dns
+# iptables -t nat -A clash_dns -p udp --dport 53 -j REDIRECT --to-ports 7853
+
 # CREATE TABLE
 iptables -t mangle -N clash
 

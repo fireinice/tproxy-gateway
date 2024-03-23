@@ -26,10 +26,10 @@ gen_ips() {
 }
 
 echo -n "Generating ipset..."
-gen_ips_multi $DEST_V4 bypass_dest
-gen_ips_multi $DEST_V6 bypass_dest_v6
-gen_ips_multi $SOURCE_V4 bypass_source
-gen_ips_multi $SOURCE_V6 bypass_source_v6
+gen_ips_multi $NET_DST_V4 bypass_dest
+gen_ips_multi $NET_DST_V6 bypass_dest_v6
+gen_ips_multi $NET_SRC_V4 bypass_source
+gen_ips_multi $NET_SRC_V6 bypass_source_v6
 gen_ips_multi $MAC_SRC_V4 bypass_mac_src
 gen_ips_multi $MAC_SRC_V6 bypass_mac_src_v6
 echo "done"
