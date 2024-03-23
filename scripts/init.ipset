@@ -1,0 +1,35 @@
+create bypass_private hash:net family inet hashsize 1024 maxelem 65536 bucketsize 12 initval 0x61e4e4e7
+add bypass_private 0.0.0.0/8
+add bypass_private 10.0.0.0/8
+add bypass_private 100.64.0.0/10
+add bypass_private 127.0.0.0/8
+add bypass_private 169.254.0.0/16
+add bypass_private 172.16.0.0/12
+add bypass_private 192.0.0.0/24
+add bypass_private 192.0.2.0/24
+add bypass_private 192.88.99.0/24
+add bypass_private 192.168.0.0/16
+add bypass_private 198.18.0.0/15
+add bypass_private 198.51.100.0/24
+add bypass_private 203.0.113.0/24
+add bypass_private 224.0.0.0/4
+add bypass_private 233.252.0.0/24
+add bypass_private 255.255.255.255/32
+
+# create bypass_private_v6 hash:net family inet hashsize 1024 maxelem 65536 bucketsize 12 initval 0xbfa9234a
+# add bypass_private_v6 ::1/128
+# add bypass_private_v6 fc00::/7
+# add bypass_private_v6 e80::/10
+# add bypass_private_v6 ff00::/8
+
+create bypass_dest hash:net family inet hashsize 4096 maxelem 65536 bucketsize 12 initval 0x823aaf28
+
+# create bypass_dest_v6 hash:net family inet hashsize 4096 maxelem 65536 bucketsize 12 initval 0xaeed16ab
+
+create bypass_source hash:net family inet hashsize 4096 maxelem 65536 bucketsize 12 initval 0x5064ff2a
+
+# create bypass_source_v6 hash:net family inet hashsize 4096 maxelem 65536 bucketsize 12 initval 0x2dead8cb
+
+create bypass_mac_src hash:mac hashsize 4096 maxelem 65536 bucketsize 12 initval 0xc8a5a9e4
+
+# create bypass_source_v6 hash:mac hashsize 4096 maxelem 65536 bucketsize 12 initval 0x7b6f7f50
