@@ -29,11 +29,13 @@ iptables -t mangle -A PREROUTING -j clash
 
 # SKIP ALL SOCKETS ALREADY CONNECTED AND INSERT INTO HEAD OF Mangle
 if [ "$DIVERT_SOCKET" = true ]; then
+    # use restore-skmark will cause youtube video load problem
     iptables -t mangle -N DIVERT
     iptables -t mangle -A DIVERT -j MARK --set-mark 1
     iptables -t mangle -A DIVERT -j ACCEPT
-    iptables -t mangle -I PREROUTING -p tcp -m socket -j DIVERT
+    iptables -t mangle -I PREROUTING -p tcp -m socket --transparent -j DIVERT
 fi
+
 # ip6tables -t mangle -N clash
 
 # ip6tables -t mangle -A clash -m set --match-set bypass_private_v6 dst -j RETURN
