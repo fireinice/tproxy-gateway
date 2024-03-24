@@ -7,7 +7,7 @@
 详细配置可以参考`docker-compose.yaml`
 
 ## 虚拟子网络
-作为网关需要独立的ip地址，*必须*使用[macvlan](https://uefeng.com/docker-macvlan.html)（推荐）设立新的容器ip。
+作为网关需要独立的ip地址，*必须*使用[macvlan](https://uefeng.com/docker-macvlan.html)设立新的容器ip。
 
 macvlan要求宿主机的网卡设为[混杂模式](https://zdyxry.github.io/2020/03/18/%E7%90%86%E8%A7%A3%E7%BD%91%E5%8D%A1%E6%B7%B7%E6%9D%82%E6%A8%A1%E5%BC%8F/)。
 ```bash
@@ -68,14 +68,14 @@ iface eno1 inet static
 如 NET_DST_V4='http://www.ipdeny.com/ipblocks/data/countries/cn.zone;/root/config/bypass_ips'
 则会将`http://www.ipdeny.com/ipblocks/data/countries/cn.zone`及`/root/config/bypass_ips`中的地址都进行解析后加入到需要排除的流量中。
 
-#### NET_DST_V4
+#### NET_DST_V4(可选)
 支持列表文件url或容器中本地列表文件，文件中每行为一个排除的网段, 当目的地ip命中其中的网段时则不进行流量转发。文件中格式如以下样例：
 ```
 14.1.64.0/19
 27.100.36.0/22
 ```
 
-#### MAC_SRC_V4
+#### MAC_SRC_V4（可选）
 支持列表文件url或容器中本地列表文件，文件中每行为一个MAC地址, 当来源命中其中的mac地址时则不进行流量转发，适合用于排除局域网中特定的设备。文件中格式如以下样例：
 
 ```
