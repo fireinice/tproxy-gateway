@@ -1,5 +1,7 @@
 # 使用说明
 
+[[仓库地址](https://github.com/fireinice/tproxy-gateway)]
+
 一个简单的基于tproxy的网关镜像，需要配合可以提供透明代理的服务进行配置。
 本镜像可以作为网关使用，使用iptables将经过的流量自动转发到相关的TPROXY服务接口上。
 详细配置可以参考`docker-compose.yaml`
