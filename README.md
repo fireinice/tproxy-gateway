@@ -3,7 +3,9 @@
 [[仓库地址](https://github.com/fireinice/tproxy-gateway)]
 
 一个简单的基于tproxy的网关镜像，需要配合可以提供透明代理的服务进行配置。
+
 本镜像可以作为网关使用，使用iptables将经过的流量自动转发到相关的TPROXY服务接口上。
+
 详细配置可以参考`docker-compose.yaml`
 
 ## 虚拟子网络
@@ -42,11 +44,14 @@ iface eno1 inet static
 
 ## TPORXY服务（必需）
 镜像本身不提供TPROXY服务，需要配合提供TPROXY服务的镜像一起使用。
+
 并将tproxy服务容器的network_mode设置为`network_mode: "service:gateway"`
+
 其中gateway为本镜像容器的服务名。
 
 ## DNS服务
-镜像本身不提供DNS服务，可以配合提供DNS服务的镜像一起使用。（可选）
+镜像本身不提供DNS服务，可以配合提供DNS服务的镜像一起使用（可选）。
+
 如果不设置dns服务，由于android手机会强制将8.8.8.8设置为手机的主dns，有可能会导致局域网中的android手机的ip查询失败。
 
 ## 配置环境变量
@@ -61,7 +66,7 @@ iface eno1 inet static
 开启这一选项，会跳过已建立连接的socket流量，不进行流量转发。如果发现网站可访问性不稳定，可以尝试关闭(`DIVERT_SOCKET=false`)
 
 ### 流量排除选项
-服务默认会排除所有[局域网内流量](https://zh-m-wikipedia-org.translate.goog/zh-cn/%E4%BF%9D%E7%95%99IP%E5%9C%B0%E5%9D%80?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=sc)不不进行流量转发。使用环境变量设置可以配置更多排除的ip地址
+服务默认会排除所有[局域网内流量](https://zh-m-wikipedia-org.translate.goog/zh-cn/%E4%BF%9D%E7%95%99IP%E5%9C%B0%E5%9D%80?_x_tr_sl=zh-CN&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=sc)不进行流量转发。使用环境变量设置可以配置更多排除的ip地址。
 
 以下环境变量可以使用url(http/https开头)或本地文件地址进行设置。并使用';'进行分隔。
 
