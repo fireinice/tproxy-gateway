@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  gateway:
+    container_name: gateway
+    image: fireinice/tproxy-gateway:latest
+    restart: always
+    environment:
+      TPROXY_PORT: 7893
+      DNS_PORT: 7853
+      NET_DST_V4: "http://www.ipdeny.com/ipblocks/data/countries/cn.zone;/ips/v4"
+      NET_SRC_V4: # match net definition to skip from tproxy
+      MAC_SRC_V4: # match mac address definition to skip from tproxy
+      DIVERT_SOCKET: true # whethe skip socket connected
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /path/to/files/contained/ipv4/net:/ips/v4
+    networks:
+      vlan:
+        ipv4_address: 10.128.0.32
+
+  ################
+  #
+  # A TProxy Service Provide tproxy Service on Port $TPROXY_PORT
+  #
+  ################
+ # tporxy:
+ #    container_name: tproxy
+ #    image: tproxy-service
+ #    restart: always
+ #    network_mode: "service:gateway"
+ #    cap_add:
+ #      - NET_ADMIN
+ #    depends_on:
+ #      - gateway
+
+  ################
+  #
+  # A NameServer Service Provide dns Service on Port $DNS_PORT
+  #
+  ################
+ # tporxy:
+ #    container_name: tproxy
+ #    image: tproxy-service
+ #    restart: always
+ #    network_mode: "service:gateway"
+ #    cap_add:
+ #      - NET_ADMIN
+ #    depends_on:
+ #      - gateway
+
+networks:
+  vlan:
+    driver: macvlan
+    driver_opts:
+      parent: eno1
+    ipam:
+      config:
+        - subnet: 10.128.0.0/24
+          gateway: 10.128.0.1
+          ip_range: 10.128.0.32/27
