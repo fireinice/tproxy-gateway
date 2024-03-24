@@ -36,8 +36,7 @@ iface eno1 inet static
 根据主路由的支持方式，根据路由有两种方式将镜像容器设置为网关
 
 1. 在主路由器中的网关地址设置为容器ip地址（如果使用host mode则为宿主机地址）
-2. 如果主路由器无法设置网关地址，则需要配置[adguard](https://hub.docker.com/r/adguard/a
-dguardhome)或[dnsmasq](https://hub.docker.com/r/dockurr/dnsmasq)等支持dhcpd的服务，并配置为局域网中的dhcpd服务，将路由器中的dhcpd服务关闭掉。
+2. 如果主路由器无法设置网关地址，则需要配置[adguard](https://hub.docker.com/r/adguard/adguardhome)或[dnsmasq](https://hub.docker.com/r/dockurr/dnsmasq)等支持dhcpd的服务，并配置为局域网中的dhcpd服务，将路由器中的dhcpd服务关闭掉。
 
 ## TPORXY服务（必需）
 镜像本身不提供TPROXY服务，需要配合提供TPROXY服务的镜像一起使用。
