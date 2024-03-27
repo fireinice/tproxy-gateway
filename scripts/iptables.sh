@@ -28,8 +28,8 @@ iptables -t mangle -A clash -p tcp -j TPROXY --on-port $TPROXY_PORT --tproxy-mar
 # REDIRECT
 iptables -t mangle -A PREROUTING -j clash
 
-iptables -A OUTPUT -m set --match-set local_ips src,dst -p udp --sport 1000:65535 --dport 7893 -j REJECT
-iptables -A OUTPUT -m set --match-set local_ips src,dst -p tcp --sport 1000:65535 --dport 7893 -j REJECT
+iptables -A OUTPUT -m set --match-set local_ips src,dst -p udp --sport 1000:65535 --dport $TPROXY_PORT -j REJECT
+iptables -A OUTPUT -m set --match-set local_ips src,dst -p tcp --sport 1000:65535 --dport $TPROXY_PORT -j REJECT
 
 # SKIP ALL SOCKETS ALREADY CONNECTED AND INSERT INTO HEAD OF Mangle
 if [ "$DIVERT_SOCKET" = true ]; then
