@@ -7,8 +7,9 @@ fi
 
 cp /scripts/init.ipset /iptables/ipset
 /scripts/update_ipset.sh /iptables/ipset
+
 /scripts/iptables.sh
 if [ $? -ne 0 ]; then
     exit 1
 fi
-sleep infinite
+sleep inf

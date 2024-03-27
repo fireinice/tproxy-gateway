@@ -32,6 +32,11 @@ gen_ips_multi $NET_SRC_V4 bypass_source
 gen_ips_multi $NET_SRC_V6 bypass_source_v6
 gen_ips_multi $MAC_SRC_V4 bypass_mac_src
 gen_ips_multi $MAC_SRC_V6 bypass_mac_src_v6
+
+ipset create local_ips hash:ip
+ifconfig | grep 'inet addr' | cut -d: -f2 | awk '{ print $1 }' | while read ip; do
+    ipset add local_ips $ip
+done
 echo "done"
 
 echo -n "Restore ipset..."

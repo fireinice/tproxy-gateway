@@ -5,12 +5,13 @@ ip route add local 0.0.0.0/0 dev lo table 100
 
 if [ -n "$DNS_PORT" ]; then
     iptables -t nat -N clash_dns
-    iptables -t nat -F clash_dns
     iptables -t nat -A clash_dns -m set --match-set bypass_private dst -j RETURN
-    # iptables -t nat -A clash_dns -m set --match-set bypass_dest dst -j RETURN
     iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
+    iptables -t nat -A clash_dns -p tcp -j REDIRECT --to-port $DNS_PORT
     iptables -t nat -I PREROUTING -p udp --dport 53 -j clash_dns
+    iptables -t nat -I PREROUTING -p tcp --dport 853 -j clash_dns
 fi
+
 # CREATE TABLE
 iptables -t mangle -N clash
 
@@ -21,11 +22,14 @@ iptables -t mangle -A clash -m set --match-set bypass_source src -j RETURN
 iptables -t mangle -A clash -m set --match-set bypass_mac_src src -j RETURN
 
 # FORWARD ALL
-iptables -t mangle -A clash -p udp -j TPROXY --on-port $TPROXY_PORT --on-ip 0.0.0.0 --tproxy-mark 1
-iptables -t mangle -A clash -p tcp -j TPROXY --on-port $TPROXY_PORT --on-ip 0.0.0.0 --tproxy-mark 1
+iptables -t mangle -A clash -p udp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark 1
+iptables -t mangle -A clash -p tcp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark 1
 
 # REDIRECT
 iptables -t mangle -A PREROUTING -j clash
+
+iptables -A OUTPUT -m set --match-set local_ips src,dst -p udp --sport 1000:65535 --dport 7893 -j REJECT
+iptables -A OUTPUT -m set --match-set local_ips src,dst -p tcp --sport 1000:65535 --dport 7893 -j REJECT
 
 # SKIP ALL SOCKETS ALREADY CONNECTED AND INSERT INTO HEAD OF Mangle
 if [ "$DIVERT_SOCKET" = true ]; then
