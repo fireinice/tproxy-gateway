@@ -12,4 +12,5 @@ cp /scripts/init.ipset /iptables/ipset
 if [ $? -ne 0 ]; then
     exit 1
 fi
-sleep inf
+
+trap : TERM INT; (while true; do sleep 1d; done) & wait
