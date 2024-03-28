@@ -2,12 +2,12 @@
 DEST_IPSET=$@
 DEST_DIR=`dirname $DEST_IPSET`
 gen_ips_multi() {
-  parts=$(echo $1 | tr ";" "\n")
+    parts=$(echo $1 | tr ";" "\n")
 
- for part in $parts
- do
-     gen_ips $part $2
- done
+    for part in $parts
+    do
+	gen_ips $part $2
+    done
 
 }
 

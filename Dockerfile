@@ -1,6 +1,6 @@
 FROM alpine:latest
-ENV NET_DEST_V4= \
-    NET_DEST_V6= \
+ENV NET_DST_V4= \
+    NET_DST_V6= \
     NET_SRC_V4= \
     NET_SRC_V6= \
     MAC_SRC_V4= \

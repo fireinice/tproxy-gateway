@@ -9,5 +9,6 @@ if [ $? -ne 0 ]; then
     echo "Successfully loaded ipset from backup $outf"
 else
     sed -i "s/^/add ${3} /" $outf
+    ipset restore < $outf
     echo "Successfully loaded ipset from $2"
 fi
