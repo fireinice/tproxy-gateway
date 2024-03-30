@@ -8,14 +8,17 @@ if [ -n "$DNS_PORT" ]; then
     iptables -t nat -A clash_dns -m set --match-set bypass_private dst -j RETURN
     iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
     iptables -t nat -A clash_dns -p tcp -j REDIRECT --to-port $DNS_PORT
-    iptables -t nat -I PREROUTING -p udp --dport 53 -j clash_dns
-    iptables -t nat -I PREROUTING -p tcp --dport 853 -j clash_dns
+    iptables -t nat -A PREROUTING -p udp --dport 53 -j clash_dns
+    iptables -t nat -A PREROUTING -p tcp --dport 853 -j clash_dns
 fi
 
 # CREATE TABLE
 iptables -t mangle -N clash
 
 # RETURN LOCAL AND LANS
+# for later redirect
+iptables -t mangle -A clash -p udp --dport 53 -j RETURN
+iptables -t mangle -A clash -p tcp --dport 853 -j RETURN
 iptables -t mangle -A clash -m set --match-set bypass_private dst -j RETURN
 iptables -t mangle -A clash -m set --match-set bypass_dest dst -j RETURN
 iptables -t mangle -A clash -m set --match-set bypass_source src -j RETURN

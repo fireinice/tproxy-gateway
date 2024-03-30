@@ -8,10 +8,10 @@ ENV NET_DST_V4= \
     TPROXY_PORT= \
     DNS_PORT= \
     DIVERT_SOCKET=true
+RUN apk add --no-cache ca-certificates tzdata iptables ipset
 ADD entrypoint.sh /
 ADD scripts /scripts
 VOLUME /iptables
-RUN apk add --no-cache ca-certificates tzdata iptables ipset
 HEALTHCHECK --interval=60s --retries=1 \
   CMD /scripts/health_check.sh
 ENTRYPOINT [ "/entrypoint.sh" ]

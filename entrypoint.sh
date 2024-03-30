@@ -13,4 +13,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-trap : TERM INT; (while true; do sleep 1d; done) & wait
+trap : TERM INT; sleep inf & wait
