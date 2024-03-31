@@ -16,6 +16,7 @@ add bypass_private 224.0.0.0/4
 add bypass_private 233.252.0.0/24
 add bypass_private 255.255.255.255/32
 
+# https://zh.wikipedia.org/wiki/%E4%BF%9D%E7%95%99IP%E5%9C%B0%E5%9D%80
 # create bypass_private_v6 hash:net family inet hashsize 1024 maxelem 65536 bucketsize 12 initval 0xbfa9234a
 # add bypass_private_v6 ::1/128
 # add bypass_private_v6 fc00::/7
