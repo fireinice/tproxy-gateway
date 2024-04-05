@@ -3,10 +3,19 @@
 ip rule add fwmark 1 table 100
 ip route add local 0.0.0.0/0 dev lo table 100
 
+if [ -n "$DNS_HOST" -a -z "$DNS_PORT" ]; then
+    DNS_PORT=53
+fi
+
 if [ -n "$DNS_PORT" ]; then
     iptables -t nat -N clash_dns
     iptables -t nat -A clash_dns -m set --match-set bypass_private dst -j RETURN
-    iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
+    if [ -z "$DNS_HOST" ]; then
+	iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
+    else
+	iptables -t nat -A clash_dns -p udp -j DNAT --to $DNS_HOST:$DNS_PORT
+	iptables -t nat -A POSTROUTING -j MASQUERADE
+    fi
     iptables -t nat -A PREROUTING -p udp --dport 53 -j clash_dns
 fi
 

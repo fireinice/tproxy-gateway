@@ -60,7 +60,10 @@ iface eno1 inet static
 设置为提供TPROXY服务的TPROXY服务端口，所有未被排除的tcp/udp流量均会被转发到这一端口。如果tproxy端口失效，则网络内所有机器均无法连接互联网。
 
 ### DNS_PORT(可选)
-设置为提供DNS服务的DNS服务端口。需要保证相关的dns服务返回正确的ip地址，否则域名解析错误的网站无法连接。
+设置为提供DNS服务的DNS服务端口。需要保证相关的dns服务返回正确的ip地址，否则域名解析错误的网站无法连接。如果设置DNS_PORT没有设置DNS_HOST，则发往本地DNS_PORT端口
+
+### DNS_HOST(可选)
+设置为提供DNS服务的DNS服务器IP。需要保证相关的dns服务返回正确的ip地址，否则域名解析错误的网站无法连接。如果设置DNS_HOST没有设置DNS_PORT，则默认发送到53端口
 
 ### DIVERT_SOCKET(默认开启)
 开启这一选项，会跳过已建立连接的socket流量，不进行流量转发。如果发现网站可访问性不稳定，可以尝试关闭(`DIVERT_SOCKET=false`)
