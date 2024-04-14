@@ -1,6 +1,8 @@
 #!/bin/sh
+TPMARK=1
+DNSMARK=9853
 
-ip rule add fwmark 1 table 100
+ip rule add fwmark ${TPMARK} table 100
 ip route add local 0.0.0.0/0 dev lo table 100
 
 if [ -n "$DNS_HOST" -a -z "$DNS_PORT" ]; then
@@ -13,8 +15,12 @@ if [ -n "$DNS_PORT" ]; then
     if [ -z "$DNS_HOST" ]; then
 	iptables -t nat -A clash_dns -p udp -j REDIRECT --to-port $DNS_PORT
     else
-	iptables -t nat -A clash_dns -p udp -j DNAT --to $DNS_HOST:$DNS_PORT
-	iptables -t nat -A POSTROUTING -j MASQUERADE
+	if [ "$DNS_HOST" = "${DNS_HOST%:*}" ]; then
+	    DNS_HOST=$DNS_HOST:$DNS_PORT
+	fi
+	iptables -t nat -A clash_dns -j MARK --set-mark ${DNSMARK}
+	iptables -t nat -A clash_dns -p udp -j DNAT --to $DNS_HOST
+	iptables -t nat -A POSTROUTING -m mark --mark ${DNSMARK} -j MASQUERADE
     fi
     iptables -t nat -A PREROUTING -p udp --dport 53 -j clash_dns
 fi
@@ -31,8 +37,8 @@ iptables -t mangle -A clash -m set --match-set bypass_source src -j RETURN
 iptables -t mangle -A clash -m set --match-set bypass_mac_src src -j RETURN
 
 # FORWARD ALL
-iptables -t mangle -A clash -p udp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark 1
-iptables -t mangle -A clash -p tcp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark 1
+iptables -t mangle -A clash -p udp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark ${TPMARK}
+iptables -t mangle -A clash -p tcp -j TPROXY --on-port $TPROXY_PORT --tproxy-mark ${TPMARK}
 
 # REDIRECT
 iptables -t mangle -A PREROUTING -j clash
